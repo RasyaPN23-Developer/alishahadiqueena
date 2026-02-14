@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>For You 💗</title>
+
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        font-family: "Segoe UI", sans-serif;
+        background: #f8f5f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+
+        opacity: 0;
+        transform: scale(1.02);
+        transition:
+          opacity 1.2s ease,
+          transform 1.2s ease;
+      }
+
+      body.show {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .container {
+        position: relative;
+      }
+
+      img {
+        width: 180px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        color: #b33951;
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+
+      p {
+        color: #666;
+        margin-bottom: 25px;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+      }
+
+      .btn {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: none;
+        font-size: 30px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .yes {
+        background: #4caf50;
+        color: white;
+      }
+
+      .no {
+        background: #e74c3c;
+        color: white;
+        position: relative;
+      }
+
+      .btn:hover {
+        transform: scale(1.1);
+      }
+
+      #message {
+        margin-top: 30px;
+        max-width: 400px;
+        opacity: 0;
+        transition: 0.8s ease;
+      }
+
+      #message.show {
+        opacity: 1;
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+      #nextPageBtn {
+        margin-top: 30px;
+        padding: 14px 30px;
+        font-size: 18px;
+        background: #ff5c8a;
+        color: white;
+        border: none;
+        border-radius: 40px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      #nextPageBtn:hover {
+        transform: scale(1.1);
+        background: #ff2e6e;
+      }
+
+      .message {
+        margin-top: 10px;
+        font-size: 18px;
+        color: #666;
+        max-width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .photo {
+        width: 250px;
+        background: white;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        transform: rotate(-3deg);
+      }
+
+      .photo.big {
+        transform: scale(1.1);
+      }
+
+      .buttons {
+        transition: 0.5s ease;
+      }
+
+      .buttons.hide {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="confetti"></canvas>
+
+    <div class="container">
+      <!-- GANTI dengan gambar kamu -->
+      <img src="assets/fotoberduaa.jpg" alt="cute" class="photo" />
+
+      <h1 id="mainTitle">Will You Be My Girlfriend?</h1>
+      <p id="subText">Alisha Hadi Queena</p>
+
+      <div class="buttons" id="buttons">
+        <button class="btn yes" onclick="yesAnswer()">✓</button>
+        <button class="btn no" id="noBtn" onmouseover="moveNo()">✕</button>
+      </div>
+      <button id="nextPageBtn" onclick="goToLoveLetter()" style="display: none">Klik ini yaa jangan kabur 😤💕</button>
+    </div>
+
+    <audio id="bgMusic" src="assets/salpriadi.mp3"></audio>
+
+    <script>
+      const noBtn = document.getElementById("noBtn");
+
+      function moveNo() {
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 100);
+        noBtn.style.position = "absolute";
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+      }
+
+      function yesAnswer() {
+        startConfetti();
+        document.getElementById("bgMusic").play();
+        document.querySelector(".photo").classList.add("big");
+
+        document.getElementById("mainTitle").innerText = "YEAYYY 💖";
+
+        document.getElementById("subText").innerText = "Selamat kamu telah menjadi pacar Rasya Pradana Nurmawanto";
+        document.getElementById("buttons").classList.add("hide");
+
+        setTimeout(() => {
+          document.getElementById("buttons").style.display = "none";
+        }, 500);
+      }
+      /* CONFETTI */
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let particles = [];
+      let animationRunning = false;
+      const totalParticles = 400;
+
+      function random(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      function createParticle() {
+        const types = ["confetti", "heart", "flower"];
+
+        return {
+          x: random(0, canvas.width),
+          y: random(-canvas.height, 0),
+          size: random(8, 18),
+          speedY: random(1, 2.5),
+          speedX: random(-0.8, 0.8),
+          rotation: random(0, 360),
+          rotationSpeed: random(-2, 2),
+          type: types[Math.floor(Math.random() * types.length)],
+          opacity: random(0.7, 1),
+        };
+      }
+
+      function startConfetti() {
+        particles = [];
+        for (let i = 0; i < totalParticles; i++) {
+          particles.push(createParticle());
+        }
+
+        if (!animationRunning) {
+          animationRunning = true;
+          animate();
+        }
+      }
+
+      function drawHeart(x, y, size) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.bezierCurveTo(x - size / 2, y - size / 2, x - size, y + size / 3, x, y + size);
+        ctx.bezierCurveTo(x + size, y + size / 3, x + size / 2, y - size / 2, x, y);
+        ctx.fillStyle = "#ff4d6d";
+        ctx.fill();
+      }
+
+      function drawFlower(x, y, size) {
+        for (let i = 0; i < 5; i++) {
+          ctx.beginPath();
+          ctx.arc(x + (Math.cos((i * 72 * Math.PI) / 180) * size) / 2, y + (Math.sin((i * 72 * Math.PI) / 180) * size) / 2, size / 3, 0, Math.PI * 2);
+          ctx.fillStyle = "#ff8fab";
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(x, y, size / 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffd166";
+        ctx.fill();
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach((p) => {
+          ctx.save();
+          ctx.globalAlpha = p.opacity;
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+
+          if (p.type === "confetti") {
+            ctx.fillStyle = ["#ff4d6d", "#ff8fab", "#a0c4ff", "#ffd166"][Math.floor(Math.random() * 4)];
+            ctx.fillRect(-p.size / 4, -p.size / 4, p.size / 2, p.size / 2);
+          } else if (p.type === "heart") {
+            drawHeart(0, 0, p.size / 2);
+          } else {
+            drawFlower(0, 0, p.size / 2);
+          }
+
+          ctx.restore();
+
+          p.y += p.speedY;
+          p.x += p.speedX;
+          p.rotation += p.rotationSpeed;
+
+          if (p.y > canvas.height) {
+            p.y = -20;
+            p.x = random(0, canvas.width);
+          }
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      window.onload = function () {
+        document.body.classList.add("show");
+      };
+
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    </script>
+  </body>
+</html>

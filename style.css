@@ -1,0 +1,136 @@
+@media (max-width: 600px) {
+  .photo {
+    width: 70%;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  #subText {
+    font-size: 16px;
+    padding: 0 20px;
+  }
+
+  .btn {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+}
+
+body {
+  transition: opacity 0.8s ease;
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+/* Background foto full */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("assets/bg.jpg") no-repeat center center/cover;
+  filter: brightness(0.6);
+  z-index: -1;
+}
+
+/* Page animation */
+.page {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+  pointer-events: none;
+}
+
+.page.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 300;
+  max-width: 600px;
+  margin: 0 20px 20px;
+}
+
+button {
+  padding: 10px 30px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: white;
+  color: black;
+}
+
+/* Fade out effect sebelum pindah halaman */
+body.fade-out {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+/* === FLOWER ANIMATION === */
+
+.flower {
+  position: fixed;
+  top: -50px;
+  font-size: 20px;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* === LOVE ANIMATION === */
+
+.love {
+  position: fixed;
+  top: -50px;
+  font-size: 18px;
+  pointer-events: none;
+  animation: fallLove linear forwards;
+}
+
+@keyframes fallLove {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(50vh) scale(1.2);
+  }
+  100% {
+    transform: translateY(110vh) scale(0.8);
+    opacity: 0;
+  }
+}
